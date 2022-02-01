@@ -5,7 +5,7 @@ Peque DI is an [IoC](https://en.wikipedia.org/wiki/Inversion_of_control) contain
 ## Install
 
 ```shell
-npm install @peque/di reflect-metadata
+npm install @pequehq/di reflect-metadata
 ```
 
 **Note**: tsconfig's `compilerOptions` must have both `experimentalDecorators` and `emitDecoratorMetadata` set to **true**.
@@ -13,7 +13,7 @@ npm install @peque/di reflect-metadata
 ## Example
 
 ```typescript
-import { Container, Injectable } from '@peque/di';
+import { Container, Injectable } from '@pequehq/di';
 
 // Decorate with @Injectable() classes to be set to the IoC container.
 

@@ -1,7 +1,7 @@
 {
-  "name": "@peque/di",
-  "version": "0.0.0",
-  "description": "Peque Dependency Injection",
+  "name": "@pequehq/di",
+  "version": "1.0.1",
+  "description": "IoC container for TypeScript and JavaScript applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
