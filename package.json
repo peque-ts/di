@@ -1,6 +1,6 @@
 {
   "name": "@pequehq/di",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "IoC container for TypeScript and JavaScript applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,6 +11,9 @@
     "test:coverage": "c8 pnpm test && make-coverage-badge --output-path ./coverage-badge.svg",
     "lint": "eslint \"./src/**/*.ts\" --fix"
   },
+  "files": [
+    "dist/"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/peque-ts/di.git"
