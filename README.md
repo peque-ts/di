@@ -1,5 +1,7 @@
 # Peque DI
 
+![coverage](https://raw.githubusercontent.com/peque-ts/di/main/coverage-badge.svg)
+
 Peque DI is an [IoC](https://en.wikipedia.org/wiki/Inversion_of_control) container for TypeScript and JavaScript applications.
 
 ## Install
