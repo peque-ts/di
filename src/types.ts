@@ -3,3 +3,5 @@ interface ProviderClass<T = any> extends Function {
 }
 
 export type { ProviderClass };
+
+export type IScope = 'default' | 'non-singleton';

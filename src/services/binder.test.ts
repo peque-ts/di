@@ -25,4 +25,21 @@ test('should allow binding to a different target class', () => {
   assert.is(binding.getTargetProvider(), TestProviderTarget);
 });
 
+test('should set scope', () => {
+  class TestProvider {}
+  class TestProviderTarget {}
+
+  let binding = new Binder(TestProvider);
+  assert.is(binding.getScope(), 'default');
+
+  binding.nonSingleton();
+  assert.is(binding.getScope(), 'non-singleton');
+
+  binding = new Binder(TestProvider);
+  assert.is(binding.getScope(), 'default');
+
+  binding.to(TestProviderTarget).nonSingleton();
+  assert.is(binding.getScope(), 'non-singleton');
+});
+
 test.run();
