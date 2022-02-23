@@ -1,5 +1,5 @@
 import { InjectDecoratorMetadata } from './inject.decorator.metadata';
-import { IInjectOptions } from './inject.decorator.types';
+import { IInjectOptions } from '../types';
 
 export function Inject(identifier: string, options?: IInjectOptions): PropertyDecorator & ParameterDecorator {
   return (target, propertyKey?, parameterIndex?): void => {

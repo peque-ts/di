@@ -1,4 +1,4 @@
-import { IScope } from '../types';
+import { IInjectOptions } from '../types';
 
 interface IInjectMetadata {
   identifier: string;
@@ -12,7 +12,3 @@ type InjectMetadataParam = Required<Omit<IInjectMetadata, 'propertyKey'>>;
 type InjectMetadataProperty = Required<Omit<IInjectMetadata, 'parameterIndex'>>;
 
 export type { IInjectMetadata, InjectMetadataParam, InjectMetadataProperty };
-
-export interface IInjectOptions {
-  scope: IScope;
-}
