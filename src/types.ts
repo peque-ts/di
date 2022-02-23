@@ -4,8 +4,4 @@ interface ProviderClass<T = any> extends Function {
 
 type IScope = 'default' | 'non-singleton';
 
-interface IInjectOptions {
-  scope: IScope;
-}
-
-export type { ProviderClass, IScope, IInjectOptions };
+export type { ProviderClass, IScope };
