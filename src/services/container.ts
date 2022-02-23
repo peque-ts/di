@@ -87,7 +87,7 @@ export class Container {
       dependencies[parameterIndex] = {
         identifier,
         provider: this.#getBinding(identifier).getTargetProvider(),
-        scope: options !== undefined ? options.scope : 'default',
+        scope: options?.scope ?? 'default',
       };
     }
 
