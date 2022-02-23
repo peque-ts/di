@@ -1,6 +1,6 @@
 {
   "name": "@pequehq/di",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "IoC container for TypeScript and JavaScript applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
