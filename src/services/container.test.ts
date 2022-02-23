@@ -194,4 +194,50 @@ test('should call .set for initial providers if specified', (context) => {
   assert.ok(setSpy.calledWith(Bar, 'Bar'));
 });
 
+test('should handle both default and non-singleton scopes', () => {
+  @Injectable()
+  class Counter {
+    #counter = 0;
+
+    count(): number {
+      this.#counter++;
+      return this.#counter;
+    }
+
+    get(): number {
+      return this.#counter;
+    }
+  }
+
+  @Injectable()
+  class UseCounter {
+    constructor(
+      public counter: Counter,
+      @Inject('Counter', { scope: 'non-singleton' }) public nonSingletonCounter: Counter,
+    ) {}
+  }
+
+  const DI = new Container();
+
+  DI.set(Counter, Counter.name);
+  DI.set(Counter, 'NonSingletonCounter').nonSingleton();
+  DI.set(UseCounter, UseCounter.name);
+
+  const counter = DI.get<UseCounter>('UseCounter');
+  assert.is(counter.counter.get(), 0);
+  assert.is(counter.counter.count(), 1);
+  assert.is(counter.counter.count(), 2);
+  assert.is(counter.nonSingletonCounter.get(), 0);
+  assert.is(counter.counter.get(), 2);
+  assert.is(counter.nonSingletonCounter.count(), 1);
+  assert.is(counter.nonSingletonCounter.count(), 2);
+  assert.is(counter.nonSingletonCounter.count(), 3);
+  assert.is(counter.counter.get(), 2);
+
+  const nonSingletonCounter = DI.get<Counter>('NonSingletonCounter');
+  assert.is(nonSingletonCounter.get(), 0);
+  assert.is(nonSingletonCounter.count(), 1);
+  assert.is(counter.counter.get(), 2);
+  assert.is(counter.nonSingletonCounter.get(), 3);
+});
 test.run();

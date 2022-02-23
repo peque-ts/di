@@ -35,14 +35,25 @@ class Bar {
   }
 }
 
+@Injectable()
+class Counter {
+  #counter = 0;
+
+  count() {
+    this.#counter++;
+    return this.#counter;
+  }
+}
+
 // Create a container. This const can be exported to easily access the container across other project files.
 
 const DI = new Container();
 
 // Use `set` to bind injectable classes to the container.
 
-DI.set(Foo, 'Foo');
-DI.set(Bar, 'Bar');
+DI.set(Foo, 'Foo'); // The default scope is being a singleton.
+DI.set(Bar, 'Bar'); // The default scope is being a singleton.
+DI.set(Counter, 'Counter').nonSingleton(); // The scope will be set to not be a singleton.
 
 // Retrieve class instances with `get` (or using constructor properties).
 

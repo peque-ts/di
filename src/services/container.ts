@@ -2,7 +2,7 @@ import { InjectDecoratorMetadata } from '../decorators/inject.decorator.metadata
 import { ProviderNotFoundError } from '../errors/provider-not-found.error';
 import { DesignParamTypesMetadata } from '../helpers/design-param-types.metadata';
 import { unique } from '../helpers/unique';
-import { ProviderClass } from '../types';
+import { IScope, ProviderClass } from '../types';
 import { Binder } from './binder';
 import { ContainerOptions, Dependency, ProviderInstance } from './container.types';
 
@@ -29,7 +29,8 @@ export class Container {
    * @param identifier
    */
   get<T>(identifier: Identifier): T {
-    return this.#resolve(this.#getBinding(identifier).getTargetProvider(), identifier);
+    const binding = this.#getBinding(identifier);
+    return this.#resolve(binding.getTargetProvider(), identifier, binding.getScope());
   }
 
   /**
@@ -74,15 +75,19 @@ export class Container {
     const dependencies = unique(DesignParamTypesMetadata.get(provider)).map((provider) => ({
       identifier: provider.name,
       provider,
+      scope: this.#getBinding(provider.name).getScope(),
     }));
 
-    // Evaluate if a constructor param is decorated with @Inject and override it with the specified provider instead.
+    // Evaluate if a constructor param is decorated with @Inject in order to:
+    // - Override it with the specified provider instead;
+    // - Set possible specific scope.
     const injectDependencies = InjectDecoratorMetadata.getParamsOnly(provider);
 
-    for (const { identifier, parameterIndex } of injectDependencies) {
+    for (const { identifier, parameterIndex, options } of injectDependencies) {
       dependencies[parameterIndex] = {
         identifier,
         provider: this.#getBinding(identifier).getTargetProvider(),
+        scope: options?.scope ?? 'default',
       };
     }
 
@@ -113,22 +118,25 @@ export class Container {
    * @param identifier
    * @private
    */
-  #resolve(provider: ProviderClass, identifier: Identifier): ProviderInstance {
-    if (this.#instances.has(identifier)) {
+  #resolve(provider: ProviderClass, identifier: Identifier, scope: IScope): ProviderInstance {
+    if (this.#instances.has(identifier) && scope === 'default') {
       return this.#instances.get(identifier);
     }
 
     const constructorDependencies = this.#getConstructorDependencies(provider);
 
     const injections = constructorDependencies.map((dependency) => {
-      return this.#resolve(dependency.provider, dependency.identifier);
+      return this.#resolve(dependency.provider, dependency.identifier, dependency.scope);
     });
 
     const instance = new provider(...injections);
 
     this.#setInjectProviderProperties(instance);
 
-    this.#instances.set(identifier, instance);
+    if (scope === 'default') {
+      this.#instances.set(identifier, instance);
+    }
+
     this.#options?.onInit?.(identifier, instance);
 
     return instance;
